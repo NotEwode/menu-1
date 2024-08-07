@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        align-items: center;
+      }
+      .category-container {
+        margin-top: 100px;
+        width: 80vw;
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 0 10px 0 #fff;
+        padding: 0 10px;
+      }
+      body {
+        margin: 0;
+        background-color: #243b35;
+      }
+      h1 {
+        margin: 0 10px;
+      }
+      h2 {
+        margin: 0;
+        font-family: "Roboto Condensed", sans-serif;
+        font-size: 28px;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        height: 64px;
+        align-items: center;
+        cursor: pointer;
+      }
+      h2.category-title i {
+        transition: transform 0.3s ease;
+      }
+      .sidebar {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: column;
+        position: fixed;
+        transform: translateX(100vw);
+        transition: 0.5s all ease;
+        z-index: 101;
+        background-color: #0d1614;
+        width: 100vw;
+        height: 100vh;
+      }
+      .sidebar span {
+        font-size: 30px;
+        line-height: 40px;
+        font-family: "Roboto Condensed", sans-serif;
+        color: #fff;
+      }
+      .sidebar-bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        cursor: default;
+      }
+      .sidebar-links {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 140px;
+        font-size: 36px;
+        margin-top: 20px;
+        color: #fff;
+        cursor: pointer;
+      }
+      .sidebar-top {
+        background-color: #fff;
+        width: 320px;
+        height: 320px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 30px;
+      }
+      iframe {
+        width: 300px;
+        height: 300px;
+      }
+      .item img {
+        width: 84px;
+        height: 84px;
+        border-radius: 100%;
+      }
+      .image-box {
+        width: 90px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        border-radius: 100%;
+      }
+      .item-left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .header {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: left;
+        position: fixed;
+        background-color: #243b35;
+        width: 100vw;
+        z-index: 101;
+        cursor: default;
+      }
+      .header-top {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        font-family: Oswald, sans-serif;
+        font-size: 14px;
+        height: 80px;
+        color: #fff;
+        text-shadow: 10px 10px 10px 10px #000;
+      }
+      .header-bottom {
+        background-color: #fff;
+        width: 100%;
+        height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        box-shadow: 0 0 10px 0 #fff;
+      }
+      .header-text {
+        color: #000;
+        display: inline-block;
+        font-family: "Roboto Condensed", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      #slide {
+        animation: 20s slide infinite linear;
+      }
+      @keyframes slide {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+      .menu-button {
+        position: fixed;
+        top: 10px;
+        right: 4px;
+        width: 60px;
+        height: 60px;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100%;
+        border: none;
+        transition: transform 0.5s ease;
+        z-index: 102;
+        box-shadow: 0 0 10px 0 #fff;
+        cursor: pointer;
+      }
+      .menu-button i {
+        font-size: 30px;
+        color: #000;
+      }
+      .items {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.8s ease, opacity 0.8s ease;
+      }
+      .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        cursor: default;
+      }
+      .item-left span {
+        margin-left: 10px;
+      }
+      .items.show {
+        max-height: 1000px;
+        opacity: 1;
+      }
+      .category {
+        padding: 0 10px;
+        border-bottom: 2px solid #4d4d4d;
+      }
+      .category span {
+        font-family: "Roboto Condensed", sans-serif;
+        font-size: 17px;
+      }
+      .prices {
+        width: 38px;
+        display: flex;
+        flex-direction: row;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-top"><h1>Starbucaks Coffee Co.</h1></div>
+        <div class="header-bottom">
+          <div id="slide" class="header-text">
+            <span
+              >Açılışa Özel Tüm Kahve Çeşitlerinde 30% İndirim - Açılışa Özel
+              Tüm Kahve Çeşitlerinde 30% İndirim - Açılışa Özel Tüm Kahve
+              Çeşitlerinde 30% İndirim - Açılışa Özel Tüm Kahve Çeşitlerinde 30%
+              İndirim - Açılışa Özel Tüm Kahve Çeşitlerinde 30% İndirim -
+              Açılışa Özel Tüm Kahve Çeşitlerinde 30% İndirim -</span
+            >
+          </div>
+          <div id="slide" class="header-text">
+            <span
+              >Açılışa Özel Tüm Kahve Çeşitlerinde 30% İndirim - Açılışa Özel
+              Tüm Kahve Çeşitlerinde 30% İndirim - Açılışa Özel Tüm Kahve
+              Çeşitlerinde 30% İndirim - Açılışa Özel Tüm Kahve Çeşitlerinde 30%
+              İndirim - Açılışa Özel Tüm Kahve Çeşitlerinde 30% İndirim -
+              Açılışa Özel Tüm Kahve Çeşitlerinde 30% İndirim -</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="category-container">
+        <div class="category">
+          <h2
+            class="category-title"
+            onclick="toggleItems(&#34;milky-coffees&#34;)"
+          >
+            Sıcak Kahveler <i class="fa-solid fa-chevron-down"></i>
+          </h2>
+          <div id="milky-coffees" class="items">
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/latte.jpeg"></image>
+                </div>
+                <span>Latte</span>
+              </div>
+              <span class="prices">70 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/cappuccino.jpeg"></image>
+                </div>
+                <span>Cappuccino</span>
+              </div>
+              <span class="prices">65 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/flatwhite.jpeg"></image>
+                </div>
+                <span>Flat White</span>
+              </div>
+              <span class="prices">70 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/mocha.jpeg"></image>
+                </div>
+                <span>Mocha</span>
+              </div>
+              <span class="prices">80 TL</span>
+            </div>
+          </div>
+        </div>
+        <div class="category">
+          <h2
+            class="category-title"
+            onclick="toggleItems(&#34;iced-coffees&#34;)"
+          >
+            Soğuk Kahveler <i class="fa-solid fa-chevron-down"></i>
+          </h2>
+          <div id="iced-coffees" class="items">
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/affogato.png"></image>
+                </div>
+                <span>Affogato</span>
+              </div>
+              <span class="prices">90 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/coldbrew.jpeg"></image>
+                </div>
+                <span>Cold Brew</span>
+              </div>
+              <span class="prices">60 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/icedcaffelatte.jpeg"></image>
+                </div>
+                <span>Iced Caffe Latte</span>
+              </div>
+              <span class="prices">70 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/caramelfrappuccino.png"></image>
+                </div>
+                <span>Caramel Frappuccino</span>
+              </div>
+              <span class="prices">80 TL</span>
+            </div>
+          </div>
+        </div>
+        <div class="category">
+          <h2
+            class="category-title"
+            onclick="toggleItems(&#34;cold-bewarages&#34;)"
+          >
+            Şişelenmiş İçecekler <i class="fa-solid fa-chevron-down"></i>
+          </h2>
+          <div id="cold-bewarages" class="items">
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/sanpellegrino.jpeg"></image>
+                </div>
+                <span>San Pellegrino</span>
+              </div>
+              <span class="prices">25 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/limonata.jpeg"></image>
+                </div>
+                <span>Limonata</span>
+              </div>
+              <span class="prices">30 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box"><image src="icons/su.png"></image></div>
+                <span>Su (500 ml)</span>
+              </div>
+              <span class="prices">10 TL</span>
+            </div>
+          </div>
+        </div>
+        <div class="category">
+          <h2
+            class="category-title"
+            onclick="toggleItems(&#34;sandwiches&#34;)"
+          >
+            Sandviçler <i class="fa-solid fa-chevron-down"></i>
+          </h2>
+          <div id="sandwiches" class="items">
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/fumesandvic.png"></image>
+                </div>
+                <span>Hindi Füme Sandviç</span>
+              </div>
+              <span class="prices">85 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/peynirlitost.png"></image>
+                </div>
+                <span>Peynirli Tost</span>
+              </div>
+              <span class="prices">70 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/paneciabatta.png"></image>
+                </div>
+                <span>Çıtır Pane Ciabatta</span>
+              </div>
+              <span class="prices">95 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/mozerellasandvic.png"></image>
+                </div>
+                <span>Mozerella Sandviç</span>
+              </div>
+              <span class="prices">65 TL</span>
+            </div>
+          </div>
+        </div>
+        <div class="category">
+          <h2 class="category-title" onclick="toggleItems(&#34;desserts&#34;)">
+            Tatlılar <i class="fa-solid fa-chevron-down"></i>
+          </h2>
+          <div id="desserts" class="items">
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/limonlucheesecake.png"></image>
+                </div>
+                <span>Limonlu Cheesecake</span>
+              </div>
+              <span class="prices">95 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/kahvelipasta.png"></image>
+                </div>
+                <span>Kahveli Pasta</span>
+              </div>
+              <span class="prices">90 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/tiramisu.png"></image>
+                </div>
+                <span>Tiramisu</span>
+              </div>
+              <span class="prices">90 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/ormanmeyvelitart.jpg"></image>
+                </div>
+                <span>Orman Meyveli Tart</span>
+              </div>
+              <span class="prices">85 TL</span>
+            </div>
+            <div class="item">
+              <div class="item-left">
+                <div class="image-box">
+                  <image src="icons/minibrownies.png"></image>
+                </div>
+                <span>Mini Brownie</span>
+              </div>
+              <span class="prices">70 TL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="rotate" class="menu-button">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div id="sidebar" class="sidebar">
+        <div class="sidebar-top">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2532.5157827121634!2d27.575732925204154!3d40.98836889596852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b4f50340a35871%3A0xe40b56e0d79f40ce!2sStarbucks!5e0!3m2!1str!2str!4v1723055016366!5m2!1str!2str"
+            width="600"
+            height="450"
+            style="border: 0"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+        <div class="sidebar-bottom">
+          <span>Sosyal Medya Hesaplarımızı</span>
+          <span>Takip Etmeyi Unutmayın!</span>
+          <div class="sidebar-links">
+            <a><i class="fa-brands fa-instagram"></i></a>
+            <a><i class="fa-brands fa-twitter"></i></a>
+            <a><i class="fa-brands fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/menu.js"></script>
+    <script
+      src="https://kit.fontawesome.com/64a0426863.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
